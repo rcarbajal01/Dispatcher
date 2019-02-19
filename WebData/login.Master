@@ -1,0 +1,168 @@
+﻿<%@ Master Language="C#" AutoEventWireup="True" CodeFile="login.master.cs" Inherits="WebData.login" %>
+
+<!DOCTYPE html>
+<!--
+    Master Page of the Solution
+    It contains the Navbar
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server" style="background-image:url(Content/img/background.jpg);">
+    <title></title>
+    <link href="Content/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Content/css/dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="Content/css/footer.css" rel="stylesheet" />
+    <link href="Content/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="Content/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+
+
+    <script src="Scripts/jquery-2.1.4.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+     
+    <link href="Content/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
+    <script src="Scripts/fileinput.min.js"></script>
+   
+   
+    <script src="Scripts/jquery.dataTables.min.js"></script>
+    <script src="Scripts/dataTables.bootstrap.js"></script>
+    <script src="Scripts/modernizr-custom.js"></script>
+     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script src="Scripts/jquery-ui-timepicker-addon.js"></script>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body role="document" style="background-image:url(Content/img/background.jpg);">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Administrador de campañas</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+                <!-- Container to add the search and other menus -->
+                <asp:ContentPlaceHolder ID="search" runat="server">
+                </asp:ContentPlaceHolder>
+                <!--Container -->
+
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+        <div class="col-sm-3 col-md-2 sidebar" runat="server" id="menu">
+
+                <!-- Fisrt Elemnt of the Sidebar and the default to show the Info -->
+                <ul class="nav nav-sidebar">
+                    <li runat="server" id="lidata"><a href="Home.aspx"><span aria-hidden="true" class="glyphicon glyphicon-home"></span>&nbsp;Inicio</a></li>
+                    <li runat="server" id="lidata1"><a href="data.aspx"><span aria-hidden="true" class="glyphicon glyphicon-book"></span>&nbsp;Obtener Registro</a></li>
+                    <li runat="server" id="lihistory">
+                        <a href="history.aspx"><span aria-hidden="true" class="glyphicon glyphicon-save"></span>&nbsp;Descargar Reporte</a>
+                    </li>                    
+                    <!-- The second Element of the sidebar is an informative Title -->
+                    <li runat="server" id="liupload"><a href="upload.aspx"><span aria-hidden="true" class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Cargar Datos</a></li>
+                    <li runat="server" id="lihistoryFiles"><a href="historyFiles.aspx"><span aria-hidden="true" class="glyphicon glyphicon-save"></span>&nbsp;Historico Bases</a></li>
+
+                    <!--Here we build the inout box and the controls(buttons) to browse files and upload the file -->
+                    <li runat="server" id="liaddusr"><a href="addusr.aspx"><span aria-hidden="true" class="glyphicon glyphicon-user"></span>&nbsp;Añadir Usuarios</a></li>
+                </ul>
+
+                <!-- End controls -->
+                <ul class="nav nav-sidebar"></ul>
+                <!-- End second item sidebar -->
+
+            </div>
+    </nav>
+    <!-- Fixed Navbar -->
+
+    <div class="container theme-showcase" role="main"></div>
+
+    <!-- Container load the data display page -->
+    <asp:ContentPlaceHolder ID="body" runat="server">
+    </asp:ContentPlaceHolder> 
+    <!-- Container--> 
+    <script type="text/javascript">
+        var clicked = false;  
+         function CheckBrowser()  
+           {      
+              if (clicked == false)   
+                 {      
+                  //Browser closed   
+                 }        else  
+                  {  
+                  //redirected
+                     clicked = false; 
+                   } 
+           }  
+          function bodyUnload() 
+          {   
+              setTimeout(function(){
+              self.close();
+              },5000);
+              if (clicked == false)//browser is closed  
+                  {   
+                 var request = GetRequest();  
+                   request.open("POST", "logOut.aspx", false);    
+               request.send();    
+                } 
+           } 
+ 
+           function GetRequest()  
+             {       
+             var xmlhttp;
+                if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                    xmlhttp = new XMLHttpRequest();
+                }
+                else {// code for IE6, IE5
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                return xmlhttp;
+              } 
+ 
+    var closing = true;
+    $(function () {
+        $("a,input[type=submit]").click(function () { closing = false; });
+        $(window).unload(function () {
+            if (closing) {
+                setTimeout(function(){
+              self.close();
+              },5000);
+                jQuery.ajax({ url: "logOut.aspx", async: false });
+            }
+        });
+    });
+    $(function () {
+        if (!Modernizr.inputtypes.date) {
+            $('input[type="date"]').datepicker({
+                dateFormat: 'dd/mm/yy'
+            });
+            $('input[type="date"]').attr('readOnly', 'true');
+            $('input[type="time"]').timepicker();
+            $('input[type="time"]').attr('readOnly', 'true');
+        }
+    });
+    </script>
+
+
+
+
+
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted text-center text-warning">Diseñado para 121Contact por <a href="http://digital-merge.com" target="_blank">Digital-Merge ®</a>  Todos los derechos reservados © 2016.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
+ 
